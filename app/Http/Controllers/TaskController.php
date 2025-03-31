@@ -30,11 +30,16 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(['title' => 'required']);
+        $request->validate([
+            'title' => 'required|string|max:255',
+        ]);
 
-        Task::create(['title' => $request->title,'user_id' => Auth::id()]);
+        Task::create([
+            'title' => $request->title,
+            'status' => 'not_started',  // デフォルトは「未着手」
+        ]);
 
-        return redirect()->route('tasks.index')->with('success', 'タスクを追加しました！');
+        return redirect()->route('tasks.index');
     }
 
     /**
@@ -76,13 +81,19 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        if ($task->user_id !== Auth::id()) {
-            abort(403);
-        }
+        Task::findOrFail($id)->delete();
+        return redirect()->route('tasks.index');
+    }
 
-        $task->delete();
-        return redirect()->route('tasks.index')->with('success', 'タスクを削除しました！');
+    // タスクの状態を更新（進行中、完了）
+    public function updateStatus($id, $status)
+    {
+        $task = Task::findOrFail($id);
+        $task->status = $status;
+        $task->save();
+
+        return redirect()->route('tasks.index');
     }
 }

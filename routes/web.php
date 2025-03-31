@@ -11,6 +11,10 @@ Route::middleware(['auth'])->group(function () {
 
     // タスクのルート
     Route::resource('tasks', TaskController::class);
+
+     // タスクの状態を更新するルートを追加
+     Route::patch('/tasks/{task}/status/{status}', [TaskController::class, 'updateStatus'])->name('tasks.updateStatus');
+     
     // プロフィール編集ページのルートを追加
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 });

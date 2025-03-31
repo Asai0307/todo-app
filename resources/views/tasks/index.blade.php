@@ -1,28 +1,33 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h1>タスク一覧</h1>
-    <a href="{{ route('tasks.create') }}" class="btn btn-primary">新しいタスク</a>
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <h1 class="text-2xl font-semibold mb-4">Todoリスト</h1>
 
-    @if (session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+        <!-- 新規タスク追加フォーム -->
+        <form action="{{ route('tasks.store') }}" method="POST" class="mb-4">
+            @csrf
+            <input type="text" name="title" class="border border-gray-300 p-2 rounded" placeholder="新しいタスクを追加" required>
+            <button type="submit" class="ml-2 bg-blue-500 text-white p-2 rounded">追加</button>
+        </form>
 
-    <ul class="list-group mt-3">
-        @foreach($tasks as $task)
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                {{ $task->title }}
-                <div>
-                    <a href="{{ route('tasks.edit', $task) }}" class="btn btn-warning">編集</a>
-                    <form action="{{ route('tasks.destroy', $task) }}" method="POST" class="d-inline">
+        <!-- タスクの一覧 -->
+        <ul>
+            @foreach ($tasks as $task)
+                <li class="flex items-center justify-between mb-2">
+                    <form action="{{ route('tasks.toggle', $task->id) }}" method="POST" class="flex items-center">
+                        @csrf
+                        @method('PATCH')
+                        <input type="checkbox" onchange="this.form.submit()" {{ $task->is_completed ? 'checked' : '' }}>
+                    </form>
+                    <span class="{{ $task->is_completed ? 'line-through text-gray-500' : '' }} flex-1 ml-4">{{ $task->title }}</span>
+                    <form action="{{ route('tasks.destroy', $task->id) }}" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger">削除</button>
+                        <button type="submit" class="text-red-500">削除</button>
                     </form>
-                </div>
-            </li>
-        @endforeach
-    </ul>
-</div>
+                </li>
+            @endforeach
+        </ul>
+    </div>
 @endsection
