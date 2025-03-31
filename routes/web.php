@@ -11,6 +11,8 @@ Route::middleware(['auth'])->group(function () {
 
     // タスクのルート
     Route::resource('tasks', TaskController::class);
+    // プロフィール編集ページのルートを追加
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 });
 
 // 認証関連のルート（ログイン、登録ページ）
