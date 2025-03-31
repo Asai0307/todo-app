@@ -1,24 +1,28 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todoリスト</title>
-</head>
-<body>
-    <h1>Todoリスト</h1>
-    <a href="{{ route('tasks.create') }}">新しいタスク</a>
-    <ul>
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+    <h1>タスク一覧</h1>
+    <a href="{{ route('tasks.create') }}" class="btn btn-primary">新しいタスク</a>
+
+    @if (session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    <ul class="list-group mt-3">
         @foreach($tasks as $task)
-            <li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
                 {{ $task->title }}
-                <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit">削除</button>
-                </form>
+                <div>
+                    <a href="{{ route('tasks.edit', $task) }}" class="btn btn-warning">編集</a>
+                    <form action="{{ route('tasks.destroy', $task) }}" method="POST" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">削除</button>
+                    </form>
+                </div>
             </li>
         @endforeach
     </ul>
-</body>
-</html>
+</div>
+@endsection

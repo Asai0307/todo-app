@@ -12,10 +12,10 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::all();
-
-        return view('tasks.index',compact("tasks"));
+        $tasks = Task::all(); // タスクを取得
+        return view('tasks.index', compact('tasks')); // ビューにデータを渡す
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -32,9 +32,9 @@ class TaskController extends Controller
     {
         $request->validate(['title' => 'required']);
 
-        Task::create(['title' => $request->title]);
+        Task::create(['title' => $request->title,'user_id' => Auth::id()]);
 
-        return redirect()->route('tasks.index');
+        return redirect()->route('tasks.index'))->with('success', 'タスクを追加しました！');
     }
 
     /**
@@ -50,7 +50,10 @@ class TaskController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        if ($task->user_id !== Auth::id()) {
+            abort(403);
+        }
+        return view('tasks.edit', compact('task'));
     }
 
     /**
@@ -58,7 +61,16 @@ class TaskController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        if ($task->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $request->validate([
+            'title' => 'required|max:255',
+        ]);
+
+        $task->update(['title' => $request->title]);
+        return redirect()->route('tasks.index')->with('success', 'タスクを更新しました！');
     }
 
     /**
@@ -66,7 +78,11 @@ class TaskController extends Controller
      */
     public function destroy(string $id)
     {
+        if ($task->user_id !== Auth::id()) {
+            abort(403);
+        }
+
         $task->delete();
-        return redirect()->route('tasks.index');
+        return redirect()->route('tasks.index')->with('success', 'タスクを削除しました！');
     }
 }
