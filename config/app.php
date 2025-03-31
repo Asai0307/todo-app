@@ -123,26 +123,26 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
     
-    'providers' => [
+    // 'providers' => [
         /*
          * Laravel Framework Service Providers...
          */
-        Illuminate\Auth\AuthServiceProvider::class,
-        Illuminate\Broadcasting\BroadcastServiceProvider::class,
-        Illuminate\Bus\BusServiceProvider::class,
-        Illuminate\Cache\CacheServiceProvider::class,
-        Illuminate\Foundation\Providers\FoundationServiceProvider::class,
-        Illuminate\Validation\ValidationServiceProvider::class,
-        Illuminate\Database\DatabaseServiceProvider::class,
-        Illuminate\Session\SessionServiceProvider::class,
-        Illuminate\Translation\TranslationServiceProvider::class,
-        Illuminate\Filesystem\FilesystemServiceProvider::class,
-        Illuminate\Log\LogServiceProvider::class,
-        Illuminate\Notifications\NotificationServiceProvider::class,
-        Illuminate\Broadcasting\BroadcastServiceProvider::class,
+        // Illuminate\Auth\AuthServiceProvider::class,
+        // Illuminate\Broadcasting\BroadcastServiceProvider::class,
+        // Illuminate\Bus\BusServiceProvider::class,
+        // Illuminate\Cache\CacheServiceProvider::class,
+        // Illuminate\Foundation\Providers\FoundationServiceProvider::class,
+        // Illuminate\Validation\ValidationServiceProvider::class,
+        // Illuminate\Database\DatabaseServiceProvider::class,
+        // Illuminate\Session\SessionServiceProvider::class,
+        // Illuminate\Translation\TranslationServiceProvider::class,
+        // Illuminate\Filesystem\FilesystemServiceProvider::class,
+        // Illuminate\Log\LogServiceProvider::class,
+        // Illuminate\Notifications\NotificationServiceProvider::class,
+        // Illuminate\Broadcasting\BroadcastServiceProvider::class,
         // 他のプロバイダーも追加可能...
 
         // 自分で作成したプロバイダー
-        App\Providers\RouteServiceProvider::class,
-    ],
+        // App\Providers\RouteServiceProvider::class,
+    // ],
 ];
