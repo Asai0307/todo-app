@@ -5,7 +5,7 @@ use App\Http\Controllers\TaskController;
 
 Route::middleware(['auth'])->group(function () {
     // ログイン後は直接 Todo リスト画面へリダイレクト
-    Route::get('/', function () {
+    Route::get('/tasks', function () {
         return redirect()->route('tasks.index');
     });
 

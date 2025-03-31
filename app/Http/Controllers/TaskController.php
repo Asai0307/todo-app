@@ -34,7 +34,7 @@ class TaskController extends Controller
 
         Task::create(['title' => $request->title,'user_id' => Auth::id()]);
 
-        return redirect()->route('tasks.index'))->with('success', 'タスクを追加しました！');
+        return redirect()->route('tasks.index')->with('success', 'タスクを追加しました！');
     }
 
     /**

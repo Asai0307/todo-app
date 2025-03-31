@@ -9,7 +9,7 @@ class RouteServiceProvider extends ServiceProvider
 {
     // API と HOME 定義
     public const API = 'api';
-    public const HOME = '/home';
+    public const HOME = '/tasks';
 
     /**
      * ルートモデルのバインディングやパターンフィルターの設定
