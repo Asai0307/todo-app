@@ -12,10 +12,10 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::all();
-
-        return view('tasks.index',compact("tasks"));
+        $tasks = Task::all(); // タスクを取得
+        return view('tasks.index', compact('tasks')); // ビューにデータを渡す
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -30,9 +30,14 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(['title' => 'required']);
+        $request->validate([
+            'title' => 'required|string|max:255',
+        ]);
 
-        Task::create(['title' => $request->title]);
+        Task::create([
+            'title' => $request->title,
+            'status' => 'not_started',  // デフォルトは「未着手」
+        ]);
 
         return redirect()->route('tasks.index');
     }
@@ -50,7 +55,10 @@ class TaskController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        if ($task->user_id !== Auth::id()) {
+            abort(403);
+        }
+        return view('tasks.edit', compact('task'));
     }
 
     /**
@@ -58,15 +66,34 @@ class TaskController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        if ($task->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $request->validate([
+            'title' => 'required|max:255',
+        ]);
+
+        $task->update(['title' => $request->title]);
+        return redirect()->route('tasks.index')->with('success', 'タスクを更新しました！');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        $task->delete();
+        Task::findOrFail($id)->delete();
+        return redirect()->route('tasks.index');
+    }
+
+    // タスクの状態を更新（進行中、完了）
+    public function updateStatus($id, $status)
+    {
+        $task = Task::findOrFail($id);
+        $task->status = $status;
+        $task->save();
+
         return redirect()->route('tasks.index');
     }
 }

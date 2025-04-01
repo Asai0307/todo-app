@@ -1,17 +1,24 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware(['auth'])->group(function () {
+    // ログイン後は直接 Todo リスト画面へリダイレクト
+    Route::get('/tasks', function () {
+        return redirect()->route('tasks.index');
+    });
+
+    // タスクのルート
+    Route::resource('tasks', TaskController::class);
+
+     // タスクの状態を更新するルートを追加
+     Route::patch('/tasks/{task}/status/{status}', [TaskController::class, 'updateStatus'])->name('tasks.updateStatus');
+     
+    // プロフィール編集ページのルートを追加
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 });
 
-// Route::get('/tasks',function(){
-//     return view('tasks.index');
-// });
-Route::get('/tasks', [TaskController::class,'index'])->name('tasks.index');
-Route::get('/tasks/create', [TaskController::class,'create'])->name('tasks.create');
-Route::delete('/tasks/destroy', [TaskController::class,'destroy'])->name('tasks.destroy');
-
-// 一括定義
-// Route::resource('tasks', TaskController::class);
+// 認証関連のルート（ログイン、登録ページ）
+require __DIR__.'/auth.php';
+?>
